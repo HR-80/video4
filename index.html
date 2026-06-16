@@ -91,6 +91,7 @@ https://www.youtube.com/shorts/iRn3BMAfLGg
 https://www.youtube.com/shorts/XBSLxcN5B8E
 https://www.youtube.com/shorts/zaWeZPoJtjY
 
+
 `;
 
 function getYouTubeId(url) {
@@ -174,6 +175,16 @@ function pauseCurrentVideo() {
   const iframe = container.querySelector('iframe');
   if (iframe) {
     setIframeSrc(iframe, videoIds[currentPlayingIndex], false, true);
+
+    function muteAllVideos() {
+      const allContainers = playerPage.querySelectorAll('.video-container');
+      allContainers.forEach((container, index) => {
+        const iframe = container.querySelector('iframe');
+        if (iframe) {
+          setIframeSrc(iframe, videoIds[index], false, true);
+        }
+      });
+    }
   }
 }
 
@@ -217,6 +228,7 @@ window.addEventListener('load', () => {
 
 window.addEventListener('popstate', () => {
   // عند محاولة الرجوع بزر Back، أغلق النافذة أو أعد التوجيه
+    muteAllVideos();
   window.history.pushState(null, '', window.location.href);
   window.close();
   // أو يمكن استخدام: window.location.href = 'about:blank';
@@ -224,7 +236,7 @@ window.addEventListener('popstate', () => {
 
 window.addEventListener('visibilitychange', () => {
   if (document.hidden) {
-    pauseCurrentVideo();
+    muteAllVideos();
   }
 });
 </script>
